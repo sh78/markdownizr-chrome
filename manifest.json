@@ -1,7 +1,7 @@
 {
   "name": "Markdownizr",
-  "version": "0.0.1",
-  "manifest_version": 2,
+  "version": "1.0.0",
+  "manifest_version": 3,
   "description": "Copy website page content as clean Markdown.",
   "homepage_url": "http://markdownizr.com",
   "icons": {
@@ -12,14 +12,8 @@
   "default_locale": "en",
   "options_page": "options_custom/index.html",
   "background": {
-    "scripts": [
-      "bower_components/jquery/dist/jquery.min.js",
-      "bower_components/to-markdown/dist/to-markdown.js",
-      "options_custom/lib/store.js",
-      "background.js"
-    ],
-    "pages": ["background.html"],
-    "persistent": false
+    "service_worker": "background.js",
+    "type": "module"
   },
   "content_scripts": [
     {
@@ -27,24 +21,29 @@
         "<all_urls>"
       ],
       "js": [
-        "bower_components/jquery/dist/jquery.min.js",
-        "bower_components/to-markdown/dist/to-markdown.js",
         "content.js"
       ]
     }
   ],
-  "browser_action": {
-   "default_icon": "icons/icon19.png"
+  "action": {
+    "default_icon": "icons/icon19.png"
   },
   "permissions": [
     "activeTab",
-    "tabs",
+    "scripting",
     "clipboardWrite",
     "contextMenus",
-    "http://*/*"
+    "storage"
   ],
-  "web_accessible_resources": [
-    "success_message.html"
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
   ],
-  "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'"
+  "web_accessible_resources": [{
+    "resources": ["success_message.html"],
+    "matches": ["<all_urls>"]
+  }],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
 }
